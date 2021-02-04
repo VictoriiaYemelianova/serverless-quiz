@@ -1,0 +1,62 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.quiz-container {
+  h2 {
+    text-align: center;
+  }
+}
+
+.quiz-content {
+  height: 400px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: 50px auto 0;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
+
+  .question-content {
+    flex: 1;
+  }
+}
+
+.btn-content {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.quiz-stepper {
+  display: flex;
+  margin: 0 auto;
+  margin-top: 20px;
+  position: relative;
+  
+  .delimiter {
+    position: absolute;
+    right: 35px;
+  }
+}
+
+.circle-step {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+  margin: 5px 10px;
+  cursor: default;
+
+  span {
+    font-size: 12px;
+  }
+}
+
+.active-step {
+  background-color: rgba(0, 0, 128, 0.5);
+}
