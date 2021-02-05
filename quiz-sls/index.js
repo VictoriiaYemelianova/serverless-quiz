@@ -48,22 +48,21 @@ app.get('/quizzes', function (req, res) {
 
 // Create Quiz endpoint
 app.post('/quiz', function (req, res) {
-  const quizId = uniqid();
-  const name = req.body.name;
+  const newItem = {
+    quizId: uniqid(),
+    name: req.body.name
+  }
 
   const params = {
     TableName: QUIZZES_TABLE,
-    Item: {
-      quizId: quizId,
-      name: name,
-    },
+    Item: newItem,
   }
 
   dynamoDb.put(params, (error) => {
     if (error) {
       res.status(400).json({ error: 'Could not create quiz' });
     }
-    res.json({ quizId, name });
+    res.json(newItem);
   });
 });
 
@@ -90,19 +89,18 @@ app.get('/questions/:id', function (req, res) {
 
 // Add questions for quiz category
 app.post('/add-question', function (req, res) {
-  const id = uniqid();
-  const { question, options, weight, answer, quizId } = req.body;
+  const newItem = {
+    id: uniqid(),
+    question: req.body.question,
+    options: req.body.options,
+    weight: req.body.weight,
+    answer: req.body.answer,
+    quizId: req.body.quizId
+  }
 
   const params = {
     TableName: QUESTIONS_TABLE,
-    Item: {
-      id: id,
-      question: question,
-      options: options,
-      weight: weight,
-      answer: answer,
-      quizId: quizId
-    },
+    Item: newItem,
   }
 
   dynamoDb.put(params, (error) => {
@@ -110,7 +108,7 @@ app.post('/add-question', function (req, res) {
       console.log(error);
       res.status(400).json({ error: 'Could not create quiz' });
     }
-    res.json({ id, question, options, weight, answer, quizId });
+    res.json(newItem);
   });
 });
 
