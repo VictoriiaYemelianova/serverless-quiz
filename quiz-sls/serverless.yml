@@ -1,0 +1,94 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: quiz-sls
+
+plugins:
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom:
+  tableName: 'quizzes-table'
+  questionsTable: 'questions-table'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["QuizzesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["QuestionsDynamoDBTable", "Arn" ] }
+  environment:
+    QUIZZES_TABLE: ${self:custom.tableName}
+    QUESTIONS_TABLE: ${self:custom.questionsTable}
+
+functions:
+  getQuiz:
+    handler: index.handler
+    events:
+      - http: 'GET /quizzes'
+  createQuiz:
+    handler: index.handler
+    events:
+      - http: 'POST /quiz'
+  getQuestions:
+    handler: index.handler
+    events:
+      - http: 'GET /questions/{proxy+}'
+  createQuestion:
+    handler: index.handler
+    events:
+      - http: 'POST /add-question'
+      
+resources:
+  Resources:
+    QuizzesDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: quizId
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: quizId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}
+    QuestionsDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: quizId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.questionsTable}
