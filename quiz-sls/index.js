@@ -1,5 +1,6 @@
 const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const AWS = require('aws-sdk');
@@ -21,6 +22,7 @@ if (IS_OFFLINE === 'true') {
   dynamoDb = new AWS.DynamoDB.DocumentClient();
 };
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
