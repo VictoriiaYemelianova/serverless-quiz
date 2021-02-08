@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ICategoryModel } from '../models/quiz.model';
+import { QuizService } from '../services/quiz.service';
 
 @Component({
   selector: 'app-menu',
@@ -6,11 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  public menuItems: any = ['item', 'item'];
+  public menuItems: Array<ICategoryModel> = [];
 
-  constructor() { }
+  constructor(private quizService: QuizService) { }
 
   ngOnInit(): void {
+    this.quizService.getQuizzesCategoryList().subscribe((el: Array<ICategoryModel>) => {
+      if (el.length) {
+        this.menuItems = el;
+      }
+    })
   }
 
 }
