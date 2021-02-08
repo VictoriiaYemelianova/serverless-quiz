@@ -91,10 +91,17 @@ app.get('/questions/:id', function (req, res) {
 
 // Add questions for quiz category
 app.post('/add-question', function (req, res) {
+  const options = req.body.options.map(el => {
+    return {
+      id: uniqid(),
+      option: el.option
+    }
+  });
+
   const newItem = {
     id: uniqid(),
     question: req.body.question,
-    options: req.body.options,
+    options: options,
     weight: req.body.weight,
     answer: req.body.answer,
     quizId: req.body.quizId
